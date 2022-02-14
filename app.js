@@ -1,4 +1,4 @@
-const http = require("http");
+const https = require("https");
 const url = require("url");
 const mysql = require("mysql");
 
@@ -250,7 +250,7 @@ http.createServer(
         }
     }
 )
-.listen(port , () => console.log(`server is running on port ${port}`) );
+.listen(port);
 
 
 function endCon() {
