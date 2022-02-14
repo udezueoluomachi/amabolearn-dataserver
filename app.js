@@ -84,7 +84,7 @@ http.createServer(
             });
         }
         else {
-            res.write("Hello world");
+            res.write("<H1>This only functions on post requests and only for the official site</H1>");
             res.end();
         }
         //functions
