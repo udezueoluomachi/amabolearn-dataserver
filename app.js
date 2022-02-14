@@ -3,8 +3,7 @@ const url = require("url");
 const mysql = require("mysql");
 
 let con = mysql.createConnection({
-    host: "sql11.freemysqlhosting.net",
-    port: 3306,
+    host: "https://sql11.freemysqlhosting.net",
     user: "sql11472526",
     password: "cYB1XGTcYe",
     database: "sql11472526"
