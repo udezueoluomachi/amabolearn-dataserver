@@ -1,27 +1,23 @@
 {
   "name": "amabolearn-server",
   "version": "1.0.0",
-  "description": "server for amabolearn data",
+  "description": "This is a nodejs server for handling the data of amabolearn",
   "main": "app.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node app.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/udezueoluomachi/amabolearn-server.git"
-  },
-  "keywords": [
-    "amabolearn"
-  ],
-  "author": "Udezue Oluomachi Chimaobi",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/udezueoluomachi/amabolearn-server/issues"
-  },
-  "homepage": "https://github.com/udezueoluomachi/amabolearn-server#readme",
   "dependencies": {
     "mysql": "^2.18.1"
   },
-  "devDependencies": {}
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/udezueoluomachi/amabolearn-dataserver.git"
+  },
+  "author": "udezue oluomachi chimaobi",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/udezueoluomachi/amabolearn-dataserver/issues"
+  },
+  "homepage": "https://github.com/udezueoluomachi/amabolearn-dataserver#readme"
 }

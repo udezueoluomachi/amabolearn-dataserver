@@ -1,9 +1,10 @@
-const https = require("https");
+const http = require("http");
 const url = require("url");
 const mysql = require("mysql");
 
 let con = mysql.createConnection({
-    host: "https://sql11.freemysqlhosting.net",
+    host: "sql11.freemysqlhosting.net",
+    port: 3306,
     user: "sql11472526",
     password: "cYB1XGTcYe",
     database: "sql11472526"
@@ -13,13 +14,23 @@ const port = process.env.PORT || 4000;
 
 http.createServer(
     (req, res) => {
-
-        res.writeHead(200,{
-            "Access-Control-Allow-Origin"       : "*",
-            "Acess-Control-Allow-Methods"       : "OPTIONS, POST, GET",
-            "Access-Control-Max-Age"            : 2592000,
-            "Access-Control-Request-Headers"    : "Content-Type"
-        });
+        /*let origin = url.parse(req.url , true).host;
+        console.log(origin)*/
+      /*  if (origin == "http://localhost:5500" || "https://udezueoluomachi.github.io" || "https://amabolearn.github.io") {
+            res.writeHead(200,{
+                "Access-Control-Allow-Origin"       : `${origin}`,
+                "Acess-Control-Allow-Methods"       : "OPTIONS, POST, GET",
+                "Access-Control-Max-Age"            : 2592000,
+                "Access-Control-Request-Headers"    : "Content-Type"
+            });
+        } else {*/
+            res.writeHead(200,{
+                "Access-Control-Allow-Origin"       : `https://udezueoluomachi.github.io`,
+                "Acess-Control-Allow-Methods"       : "OPTIONS, POST, GET",
+                "Access-Control-Max-Age"            : 2592000,
+                "Access-Control-Request-Headers"    : "Content-Type"
+            });
+       // }
 
 
         if(req.method == "POST") {
@@ -51,20 +62,30 @@ http.createServer(
                 if(subject != "undefined" && subject != "" && !topic && subject && !formType) {
                     sendAvailableTopics(subject)
                 }
-                if(subject && topic && !formType) {
+                else if(subject && topic && !formType) {
                     sendTopicContent(subject , topic)
                 }
-                if(formType === "signup"  && email && password && name && (email && password && name) !== "") {
+                else if(formType === "signup"  && email && password && name && (email && password && name) !== "") {
                     addAdmin( name , email , password)
                 }
-                if(formType === "login"  && email && password && (email && password) !== "") {
+                else if(formType === "login"  && email && password && (email && password) !== "") {
                     logAdmin( email , password)
                 }
                 //xmlHttp.send(`formtype=article&topic=${topic.val().trim()}&subject=${subject.val().trim()}&content=${content.val().trim()}&writer=${info[0].name}&writerId=${info[0].id}`);
-                if(formType === "itemPost" && topic && subject && content && writer && writerId && (topic && subject && content && writer && writerId) != "" ) {
+                else if(formType === "itemPost" && topic && subject && content && writer && writerId && (topic && subject && content && writer && writerId) != "" ) {
                     postItem(topic , subject , content , writer , writerId);
                 }
+                else {
+                    res.write(`${JSON.stringify({
+                        text : "Hello world"
+                    })}`);
+                    res.end();
+                }
             });
+        }
+        else {
+            res.write("Hello world");
+            res.end();
         }
         //functions
 
@@ -250,7 +271,7 @@ http.createServer(
         }
     }
 )
-.listen(port);
+.listen(port , () => console.log("server is running on port " + port));
 
 
 function endCon() {
