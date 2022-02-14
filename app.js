@@ -18,8 +18,7 @@ http.createServer(
             "Access-Control-Allow-Origin"       : "*",
             "Acess-Control-Allow-Methods"       : "OPTIONS, POST, GET",
             "Access-Control-Max-Age"            : 2592000,
-            "Access-Control-Request-Headers"    : "Content-Type",
-            Accept                              : "application/x-www-form-urlencoded"
+            "Access-Control-Request-Headers"    : "Content-Type"
         });
 
 
