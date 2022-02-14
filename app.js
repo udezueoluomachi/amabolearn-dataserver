@@ -271,7 +271,7 @@ http.createServer(
         }
     }
 )
-.listen(port , () => console.log("server is running on port " + port));
+.listen(port);
 
 
 function endCon() {
