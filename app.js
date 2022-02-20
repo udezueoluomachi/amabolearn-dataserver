@@ -9,7 +9,7 @@ http.createServer(
     (req, res) => {
 
         res.writeHead(200,{
-            "Access-Control-Allow-Origin"       : `https://udezueoluomachi.github.io`,
+            "Access-Control-Allow-Origin"       : `https://amabolearn.github.io`,
             "Acess-Control-Allow-Methods"       : "OPTIONS, POST, GET",
             "Access-Control-Max-Age"            : 2592000,
             "Access-Control-Request-Headers"    : "Content-Type"
