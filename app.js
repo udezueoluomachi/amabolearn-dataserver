@@ -1,37 +1,19 @@
 const http = require("http");
 const url = require("url");
-const mysql = require("mysql");
-
-let con = mysql.createConnection({
-    host: "sql11.freemysqlhosting.net",
-    port: 3306,
-    user: "sql11472526",
-    password: "cYB1XGTcYe",
-    database: "sql11472526"
-});
+const {Nosqljsondb} = require("./nosql-json-db.js");
+const db = new Nosqljsondb("./db.json");
 
 const port = process.env.PORT || 4000;
 
 http.createServer(
     (req, res) => {
-        /*let origin = url.parse(req.url , true).host;
-        console.log(origin)*/
-      /*  if (origin == "http://localhost:5500" || "https://udezueoluomachi.github.io" || "https://amabolearn.github.io") {
-            res.writeHead(200,{
-                "Access-Control-Allow-Origin"       : `${origin}`,
-                "Acess-Control-Allow-Methods"       : "OPTIONS, POST, GET",
-                "Access-Control-Max-Age"            : 2592000,
-                "Access-Control-Request-Headers"    : "Content-Type"
-            });
-        } else {*/
-            res.writeHead(200,{
-                "Access-Control-Allow-Origin"       : `https://udezueoluomachi.github.io`,
-                "Acess-Control-Allow-Methods"       : "OPTIONS, POST, GET",
-                "Access-Control-Max-Age"            : 2592000,
-                "Access-Control-Request-Headers"    : "Content-Type"
-            });
-       // }
 
+        res.writeHead(200,{
+            "Access-Control-Allow-Origin"       : `https://udezueoluomachi.github.io`,
+            "Acess-Control-Allow-Methods"       : "OPTIONS, POST, GET",
+            "Access-Control-Max-Age"            : 2592000,
+            "Access-Control-Request-Headers"    : "Content-Type"
+        });
 
         if(req.method == "POST") {
             let  reqBody = "" , reqUrl = "" , q , qData , subject , topic , name , password , email , formType;
@@ -72,8 +54,8 @@ http.createServer(
                     logAdmin( email , password)
                 }
                 //xmlHttp.send(`formtype=article&topic=${topic.val().trim()}&subject=${subject.val().trim()}&content=${content.val().trim()}&writer=${info[0].name}&writerId=${info[0].id}`);
-                else if(formType === "itemPost" && topic && subject && content && writer && writerId && (topic && subject && content && writer && writerId) != "" ) {
-                    postItem(topic , subject , content , writer , writerId);
+                else if(formType === "itemPost" && topic && subject && content && writer && (topic && subject && content && writer) != "" ) {
+                    postItem(topic , subject , content , writer);
                 }
                 else {
                     res.write(`${JSON.stringify({
@@ -89,200 +71,136 @@ http.createServer(
         }
         //functions
 
-        async function postItem(a, b , c , d , e) {
+        function postItem(a, b , c , d) {
             //check if topic has been discussed
-            let sql = `SELECT * FROM ${b} WHERE topic = '${a}'`;
-            await con.query(sql , (err , result) => {
-                if(err) throw err;
-                if(result.length > 0) {
-                    endCon();
+            db.selectFrom(`${b}` ,["topic"] , {
+                columns : ["topic"],
+                equals : [`${a}`]
+            },(result) => {
+                if(result.topic.length > 0) {
                     res.write("topic discussed");
                     res.end();
                 }
                 else {
-                    endCon();
-                    async function insertion() {
-                        let sql = `INSERT INTO ${b} (topic , content , writerName , writerId) VALUES (? , ? , ? , ?)`;
-                        await con.query(sql , [a , c , d , e] , (err , result) => {
-                            if(err) throw err;
-                            endCon();
-                            res.write("posted");
-                            res.end();
-                        })
-                    }
-                    insertion();
+                    db.insertInto(`${b}`, {
+                        topic : `${a}`,
+                        content : `${c}`,
+                        writerName : `${d}`
+                    });
+                    res.write("posted");
+                    res.end();
                 }
-            })
+            });
         }
 
-        async function logAdmin(a , b) {
+        function logAdmin(a , b) {
             //checking if account exists
-            let sql = `SELECT * FROM admin WHERE email = '${a}' AND password = '${b}'`;
-            await con.query(sql , (err , result) => {
-                if(err) throw err;
-                if(result.length > 0 ) {
-                    endCon();
+            db.selectFrom("admin" , ["name"] , {
+                columns : ["email","password"],
+                equals : [a,b]
+            }, (result) => {
+                if(result.name.length > 0) {
                     res.write(`${JSON.stringify(
                         [
                             {
-                                name : result[0].name,
-                                id : result[0].id
+                                name : result.name[0]
                             }
                         ]
                     )}`);
                     res.end();
-
                 }
                 else {
-                    endCon();
                     res.write("wrong info");
                     res.end();
                 }
-            })
+            });
         }
-        async function addAdmin(a , b , c) {
+
+        function addAdmin(a , b , c) {
             //checking if account exists
-            let sql = `SELECT * FROM admin WHERE name = '${a}' AND email = '${b}' AND password = '${c}'`;
-            await con.query(sql , (err , result) => {
-                if(err) throw err;
-                if(result.length > 0 ) {
-                    endCon();
+            db.selectFrom("admin" , [] , {
+                columns : ["name","email","password"],
+                equals : [a,b,c]
+            }, (result) => {
+                if(result.name.length > 0) {
                     res.write(`${JSON.stringify(
                         [
                             {
-                                name : a,
-                                id : result[0].id,
+                                name : a
                             }
                         ]
                     )}`);
                     res.end();
-
                 }
                 else {
-                    endCon();
-                    let sql = `INSERT INTO admin (name , email , password) VALUES (? , ? , ?)`;
-                    let values = [a,b,c]
-                    async function add() {
-                        await con.query(sql, values , ((err , result) => {
-                            if(err) throw err;
-                            endCon();
+                    //insert
+                    db.insertInto("admin",{
+                        name : `${a}`,
+                        email : `${b}`,
+                        password : `${c}`
+                    })
+                    res.write(`${JSON.stringify(
+                        [
+                            {
+                                name : a
+                            }
+                        ]
+                    )}`);
+                    res.end();
+                }
+            });
+        }
+        async function sendTopicContent(a , b) {
+            db.checkTable(a , (result) => {
+                if(result === true) {
+                    db.selectFrom(a , ["content","writerName"] , {
+                        columns : ["topic"],
+                        equals : [`${b}`]
+                    } , (result) => {
+                        if(result.content.length > 0) {
                             res.write(`${JSON.stringify(
                                 [
                                     {
-                                        name : a,
-                                        id : result.insertId,
+                                        content : result.content[0],
+                                        writerName : result.writerName[0]
                                     }
                                 ]
                             )}`);
                             res.end();
-                        }))
-                    }
-                    add();
+                        }
+                        else {
+                            res.write(`no such content available`);
+                            res.end();
+                        }
+                    })
+                }
+                else {
+                    res.write("table does not exist");
+                    res.end();
                 }
             })
         }
-        async function sendTopicContent(a , b) {
-            let sql = `
-            SELECT TABLE_NAME,
-            CASE
-              WHEN EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = "${a}") THEN "table exists"
-              ELSE "table does not exist"
-            END AS existence
-            FROM INFORMATION_SCHEMA.TABLES;
-            `;
-            await con.query(sql, function (err, result) {
-                if (err) throw err;
 
-                if (result[0].existence === "table exists") {
-                    let sql = `SELECT content , writerName FROM ${a} WHERE topic = '${b}'`;
-                    endCon();
-                    async function select() {
-                        await con.query(sql, (err, result) => {
-                            if (err) throw err;
-    
-                            if(result.length > 0) {
-                                endCon();
-                                res.write(`${JSON.stringify(
-                                    [
-                                        {
-                                            content : result[0].content,
-                                            writerName : result[0].writerName
-                                        }
-                                    ]
-                                )}`);
-                                res.end();
-                            }
-                            else {
-                                endCon();
-                                res.write(`no such content available`);
-                                res.end();
-                            }
-                        });
-                    }
-                    select();
+        function sendAvailableTopics(requestSubject) {
+            db.checkTable(requestSubject , (result) => {
+                if(result === true) {
+                    db.selectFrom(requestSubject , ["topic"] , null , (result) => {
+                        if(result.topic.length > 0) {
+                            res.write(`${JSON.stringify(result.topic)}`);
+                            res.end();
+                        }
+                        else {
+                            res.write(`no topics`);
+                            res.end();
+                        }
+                    })
                 }
                 else {
-                    endCon();
                     res.write("table does not exist");
                     res.end();
                 }
-            });
-        }
-
-        async function sendAvailableTopics(requestSubject) {
-            let sql = `
-                SELECT TABLE_NAME,
-                CASE
-                  WHEN EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = "${requestSubject}") THEN "table exists"
-                  ELSE "table does not exist"
-                END AS existence
-                FROM INFORMATION_SCHEMA.TABLES;
-                `;
-            await con.query(sql, function (err, result) {
-                if (err) throw err;
-
-                if (result[0].existence === "table exists") {
-                    let sql = `SELECT topic FROM ${requestSubject}`;
-                    endCon();
-                    async function select() {
-                        await con.query(sql, (err, result) => {
-                            if (err) throw err;
-    
-                            if(result.length > 0) {
-                                endCon();
-                                res.write(`${JSON.stringify(result)}`);
-                                res.end();
-                            }
-                            else {
-                                endCon();
-                                res.write(`no topics`);
-                                res.end();
-                            }
-                        });
-                    }
-                    select();
-                }
-                else {
-                    endCon();
-                    res.write("table does not exist");
-                    res.end();
-                }
-            });
+            })
         }
     }
 )
-.listen(port);
-
-
-function endCon() {
-
-    con.end();
-
-    con = mysql.createConnection({
-        host: "sql11.freemysqlhosting.net",
-        port: 3306,
-        user: "sql11472526",
-        password: "cYB1XGTcYe",
-        database: "sql11472526"
-    });
-}
+.listen(port , () => console.log("Server is running on port "+ port));

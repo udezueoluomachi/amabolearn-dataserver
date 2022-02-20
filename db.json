@@ -1,0 +1,156 @@
+[
+  {
+    "tableName": "Mathematics",
+    "columns": {
+      "topic": [
+        "random"
+      ],
+      "content": [
+      ],
+      "writerName": [
+      ]
+    }
+  },
+  {
+    "tableName": "English",
+    "columns": {
+      "topic": [],
+      "content": [],
+      "writerName": []
+    }
+  },
+  {
+    "tableName": "Physics",
+    "columns": {
+      "topic": [],
+      "content": [],
+      "writerName": []
+    }
+  },
+  {
+    "tableName": "Chemistry",
+    "columns": {
+      "topic": [],
+      "content": [],
+      "writerName": []
+    }
+  },
+  {
+    "tableName": "Biology",
+    "columns": {
+      "topic": [],
+      "content": [],
+      "writerName": []
+    }
+  },
+  {
+    "tableName": "Agricultural_sci",
+    "columns": {
+      "topic": [],
+      "content": [],
+      "writerName": []
+    }
+  },
+  {
+    "tableName": "Civic",
+    "columns": {
+      "topic": [],
+      "content": [],
+      "writerName": []
+    }
+  },
+  {
+    "tableName": "Further_maths",
+    "columns": {
+      "topic": [],
+      "content": [],
+      "writerName": []
+    }
+  },
+  {
+    "tableName": "Technical_drawing",
+    "columns": {
+      "topic": [],
+      "content": [],
+      "writerName": []
+    }
+  },
+  {
+    "tableName": "Economics",
+    "columns": {
+      "topic": [],
+      "content": [],
+      "writerName": []
+    }
+  },
+  {
+    "tableName": "Lit_in_English",
+    "columns": {
+      "topic": [],
+      "content": [],
+      "writerName": []
+    }
+  },
+  {
+    "tableName": "Government",
+    "columns": {
+      "topic": [],
+      "content": [],
+      "writerName": []
+    }
+  },
+  {
+    "tableName": "History",
+    "columns": {
+      "topic": [],
+      "content": [],
+      "writerName": []
+    }
+  },
+  {
+    "tableName": "Book_keeping",
+    "columns": {
+      "topic": [],
+      "content": [],
+      "writerName": []
+    }
+  },
+  {
+    "tableName": "Commerce",
+    "columns": {
+      "topic": [],
+      "content": [],
+      "writerName": []
+    }
+  },
+  {
+    "tableName": "Food_and_Nut",
+    "columns": {
+      "topic": [],
+      "content": [],
+      "writerName": []
+    }
+  },
+  {
+    "tableName": "Geography",
+    "columns": {
+      "topic": [],
+      "content": [],
+      "writerName": []
+    }
+  },
+  {
+    "tableName": "admin",
+    "columns": {
+      "name": [
+        "Udezue Oluomachi Chimaobi"
+      ],
+      "email": [
+        "basilchimaobi@gmail.com"
+      ],
+      "password": [
+        "basilchimaobi"
+      ]
+    }
+  }
+]
