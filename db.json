@@ -3,7 +3,6 @@
     "tableName": "Mathematics",
     "columns": {
       "topic": [
-        "random"
       ],
       "content": [
       ],
@@ -143,13 +142,10 @@
     "tableName": "admin",
     "columns": {
       "name": [
-        "Udezue Oluomachi Chimaobi"
       ],
       "email": [
-        "basilchimaobi@gmail.com"
       ],
       "password": [
-        "basilchimaobi"
       ]
     }
   }

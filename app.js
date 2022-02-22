@@ -1,16 +1,17 @@
 const http = require("http");
 const url = require("url");
-const {Nosqljsondb} = require("./nosql-json-db.js");
+const {Nosqljsondb} = require("nosql-json-db");
 const db = new Nosqljsondb("./db.json");
 
 const port = process.env.PORT || 4000;
+const adminAccessPin = "7bhvbydg088hkan/T7DGBDUWSSFFHDVY478TGFEN48HE8JEB6F";
 
 http.createServer(
     (req, res) => {
 
         res.writeHead(200,{
-            "Access-Control-Allow-Origin"       : `https://amabolearn.github.io`,
-            "Acess-Control-Allow-Methods"       : "OPTIONS, POST, GET",
+            "Access-Control-Allow-Origin"       : "*"//`https://amabolearn.github.io`,
+           , "Acess-Control-Allow-Methods"       : "OPTIONS, POST, GET",
             "Access-Control-Max-Age"            : 2592000,
             "Access-Control-Request-Headers"    : "Content-Type"
         });
@@ -40,6 +41,7 @@ http.createServer(
                 content     = qData.content;
                 writer      = qData.writer;
                 writerId    = qData.writerId;
+                accessPin   = qData.accessPin;
 
                 if(subject != "undefined" && subject != "" && !topic && subject && !formType) {
                     sendAvailableTopics(subject)
@@ -47,8 +49,14 @@ http.createServer(
                 else if(subject && topic && !formType) {
                     sendTopicContent(subject , topic)
                 }
-                else if(formType === "signup"  && email && password && name && (email && password && name) !== "") {
-                    addAdmin( name , email , password)
+                else if(formType === "signup"  && email && password && name && (email && password && name) !== "" && accessPin) {
+                    if(accessPin === adminAccessPin) {
+                        addAdmin( name , email , password);
+                    }
+                    else {
+                        res.write("Access pin is incorrect");
+                        res.end();
+                    }
                 }
                 else if(formType === "login"  && email && password && (email && password) !== "") {
                     logAdmin( email , password)
@@ -150,7 +158,7 @@ http.createServer(
                 }
             });
         }
-        async function sendTopicContent(a , b) {
+        function sendTopicContent(a , b) {
             db.checkTable(a , (result) => {
                 if(result === true) {
                     db.selectFrom(a , ["content","writerName"] , {

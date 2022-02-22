@@ -1,12 +1,11 @@
 {
   "name": "amabolearn-server",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "This is a nodejs server for handling the data of amabolearn",
   "main": "app.js",
   "dependencies": {
-    "mysql": "^2.18.1"
+    "nosql-json-db": "^1.0.0"
   },
-  "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -19,5 +18,6 @@
   "bugs": {
     "url": "https://github.com/udezueoluomachi/amabolearn-dataserver/issues"
   },
-  "homepage": "https://github.com/udezueoluomachi/amabolearn-dataserver#readme"
+  "homepage": "https://github.com/udezueoluomachi/amabolearn-dataserver#readme",
+  "devDependencies": {}
 }
