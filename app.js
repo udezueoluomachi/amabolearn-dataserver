@@ -4,7 +4,7 @@ const {Nosqljsondb} = require("nosql-json-db");
 const db = new Nosqljsondb("./db.json");
 
 const port = process.env.PORT || 4000;
-const adminAccessPin = "7bhvbydg088hkan/T7DGBDUWSSFFHDVY478TGFEN48HE8JEB6F";
+const adminAccessPin = "";
 
 http.createServer(
     (req, res) => {
